@@ -140,6 +140,20 @@ public class Persist {
         }
     }
 
+    public void addProduct(String name, String picture, String supplierID, String categoryID){
+        try{
+            PreparedStatement preparedStatement = this.connection.
+                    prepareStatement("INSERT INTO products(name, picture, sup_id, category_id) VALUE (?,?,?,?)");
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, picture);
+            preparedStatement.setString(3, supplierID);
+            preparedStatement.setString(4, categoryID);
+            preparedStatement.executeUpdate();
+        }catch (SQLException e) {
+            throw new RuntimeException("Error while adding supplier", e);
+        }
+    }
+
 
     public List<User> getAllUsers() {
         List<User> allUsers = new ArrayList<>();

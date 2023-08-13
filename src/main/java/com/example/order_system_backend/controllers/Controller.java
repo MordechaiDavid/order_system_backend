@@ -52,6 +52,11 @@ public class Controller {
         this.persist.addCategory(categoryName);
     }
 
+    @RequestMapping(value = "/add-product", method = {RequestMethod.GET, RequestMethod.POST})
+    public void addProduct(String name, String picture, String supplierID, String categoryID){
+        this.persist.addProduct(name, picture, supplierID, categoryID);
+    }
+
     @RequestMapping(value = "/get-products-by-categoryID", method = {RequestMethod.GET, RequestMethod.POST})
     public List<Product> getProductsByCategoryID(int categoryID){
         List<Product> answer = this.persist.getProductByCategory(categoryID);
