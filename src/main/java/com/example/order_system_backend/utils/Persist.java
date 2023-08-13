@@ -1,5 +1,6 @@
 package com.example.order_system_backend.utils;
 
+import com.example.order_system_backend.objects.Category;
 import com.example.order_system_backend.objects.Product;
 import com.example.order_system_backend.objects.Supplier;
 import com.example.order_system_backend.objects.User;
@@ -110,6 +111,35 @@ public class Persist {
         }
         return supplier;
     }
+
+    public List<Category> getAllCategories(){
+        List<Category> allCategories = new ArrayList<>();
+        try {
+            ResultSet resultSet = this.connection.
+                    createStatement().executeQuery("SELECT * FROM category");
+            while (resultSet.next()){
+                String name = resultSet.getString("name");
+                int id = resultSet.getInt("id");
+                Category category = new Category(name, id);
+                allCategories.add(category);
+            }
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+        return allCategories;
+    }
+
+    public void addCategory(String name){
+        try {
+            PreparedStatement preparedStatement = this.connection.
+                    prepareStatement("INSERT INTO category(name) VALUE (?)");
+            preparedStatement.setString(1, name);
+            preparedStatement.executeUpdate();
+        }catch (SQLException e) {
+            throw new RuntimeException("Error while adding supplier", e);
+        }
+    }
+
 
     public List<User> getAllUsers() {
         List<User> allUsers = new ArrayList<>();

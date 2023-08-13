@@ -1,5 +1,6 @@
 package com.example.order_system_backend.controllers;
 
+import com.example.order_system_backend.objects.Category;
 import com.example.order_system_backend.objects.Product;
 import com.example.order_system_backend.objects.Supplier;
 import com.example.order_system_backend.objects.User;
@@ -39,6 +40,16 @@ public class Controller {
     public Supplier addSupplier(String name, String id, String mail, String phone, String communicationPreference){
         this.persist.addSupplier(name, id, mail, phone, communicationPreference);
         return new Supplier(name, id, mail, phone, communicationPreference);
+    }
+
+    @RequestMapping(value = "/get-all-categories", method = {RequestMethod.GET, RequestMethod.POST})
+    public List<Category> getAllCategories(){
+        return this.persist.getAllCategories();
+    }
+
+    @RequestMapping(value = "/add-category", method = {RequestMethod.GET, RequestMethod.POST})
+    public void addCategory(String categoryName){
+        this.persist.addCategory(categoryName);
     }
 
     @RequestMapping(value = "/get-products-by-categoryID", method = {RequestMethod.GET, RequestMethod.POST})
