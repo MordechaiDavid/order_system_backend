@@ -207,6 +207,22 @@ public class Persist {
         return available;
     }
 
+    public boolean login(String token){
+        boolean exist = false;
+        try {
+            PreparedStatement preparedStatement = this.connection.
+                    prepareStatement("SELECT token FROM  users WHERE token = ?");
+            preparedStatement.setString(1, token);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                exist = true;
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return exist;
+    }
+
 
 
 

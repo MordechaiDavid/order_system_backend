@@ -80,7 +80,6 @@ public class Controller {
         if (utils.validateUsername(username)) {
             if (utils.validatePassword(password)) {
                 if (persist.usernameAvailable(username)) {
-
                     String token = createHash(username, password);
                     newAccount = new User(username, token);
                     persist.addUser(username, token);
@@ -95,6 +94,13 @@ public class Controller {
         }
         return newAccount;
     }
+
+    @RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
+    public boolean login(String username, String password){
+        String token = createHash(username, password);
+        return this.persist.login(token);
+    }
+
 
     public String createHash (String username, String password) {
         String raw = String.format("%s_%s", username, password);
