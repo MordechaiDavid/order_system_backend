@@ -2,6 +2,7 @@ package com.example.order_system_backend.utils;
 
 import com.example.order_system_backend.objects.Product;
 import com.example.order_system_backend.objects.Supplier;
+import com.example.order_system_backend.objects.User;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 import java.util.Collections;
@@ -109,6 +110,59 @@ public class Persist {
         }
         return supplier;
     }
+
+    public List<User> getAllUsers() {
+        List<User> allUsers = new ArrayList<>();
+        try {
+            ResultSet resultSet =
+                    this.connection
+                            .createStatement()
+                            .executeQuery("SELECT username, token FROM users");
+            while (resultSet.next()) {
+                String token = resultSet.getString("token");
+                String username = resultSet.getString("username");
+                User user = new User(username, token);
+                allUsers.add(user);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return allUsers;
+    }
+
+    public void addUser (String username, String token) {
+        try {
+            PreparedStatement preparedStatement =
+                    this.connection
+                            .prepareStatement("INSERT INTO users (username, token) VALUE (?,?)");
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, token);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean usernameAvailable (String username) {
+        boolean available = false;
+        try {
+            PreparedStatement preparedStatement = this.connection.prepareStatement(
+                    "SELECT * " +
+                            "FROM users " +
+                            "WHERE username = ?");
+            preparedStatement.setString(1, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                available = false;
+            } else {
+                available = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return available;
+    }
+
 
 
 
